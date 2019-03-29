@@ -22,7 +22,7 @@ class ViewController: UIViewController {
     var leftOperand = Double() // Express, leftoperand
     var rightOperand = Double() // rightOperand
     var lastOperator: operatorType?     // +, -, *, /
-    var isTypingNumber : Bool = false   //是否再輸入數字的判斷
+    var isTypeDigit : Bool = false   //是否再輸入數字的判斷
 //
     var lastOperand = Double()
 
@@ -38,15 +38,15 @@ class ViewController: UIViewController {
     @IBAction func digitButtonTuch(_ sender: UIButton) {
 //        若是螢幕正在輸入數字，後面輸入的數字會繼續加入螢幕
 //        避免第一個數字是0一直按0會變成"000000"
-        if isTypingNumber == true && messageLabel.text == "0" && sender.currentTitle! == "0" {
+        if isTypeDigit == true && messageLabel.text == "0" && sender.currentTitle! == "0" {
                 messageLabel.text = "0"
-        }else if isTypingNumber == true && messageLabel.text != "0" && sender.currentTitle! != "0" {
+        }else if isTypeDigit == true && messageLabel.text != "0" && sender.currentTitle! != "0" {
             messageLabel.text = messageLabel.text! + sender.currentTitle!
         } else {
 //            顯示第一個輸入的數字
             messageLabel.text = sender.currentTitle!
 //            開啟<螢幕正在輸入數字>
-            isTypingNumber = true
+            isTypeDigit = true
         }
         
         if let _ = lastOperator {
@@ -98,7 +98,7 @@ class ViewController: UIViewController {
         leftOperand = 0
         rightOperand = 0
         lastOperator = nil
-        isTypingNumber = false
+        isTypeDigit = false
         previousRightOperand = 0
         
         //        暫存給重複按下"="計算
@@ -120,7 +120,7 @@ class ViewController: UIViewController {
         //紀錄算法，最後由等號的條件判斷來計算值
         lastOperator = operatorType.add
         //輸入數字輸入停止
-        isTypingNumber = false
+        isTypeDigit = false
         //格式%g，可以去掉Double小數點後的零
         messageLabel.text = String(format: "%g", leftOperand)
     }
@@ -133,7 +133,7 @@ class ViewController: UIViewController {
         lastOperand = leftOperand
         print("lastOperand:", lastOperand)
         lastOperator = operatorType.subtract
-        isTypingNumber = false
+        isTypeDigit = false
         messageLabel.text = String(format: "%g", leftOperand)
     }
 
@@ -145,7 +145,7 @@ class ViewController: UIViewController {
         lastOperand = leftOperand
         print("lastOperand:", lastOperand)
         lastOperator = operatorType.multiply
-        isTypingNumber = false
+        isTypeDigit = false
         messageLabel.text = String(format: "%g", leftOperand)
     }
 //     /
@@ -156,7 +156,7 @@ class ViewController: UIViewController {
         lastOperand = leftOperand
         print("lastOperand:", lastOperand)
         lastOperator = operatorType.divide
-        isTypingNumber = false
+        isTypeDigit = false
         messageLabel.text = String(format: "%g", leftOperand)
     }
     
@@ -169,29 +169,9 @@ class ViewController: UIViewController {
                 
                 if let previousRightOperand = previousRightOperand {
                     rightOperand = previousRightOperand
-//                如果tempEqual = +,表示按了二次以上"="
-//                if tempSign == "+" {
-//                    print("1")
-//                    tempFinaNumber = tempFirstNumber + rightOperand
-//                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-//                    print(tempFinaNumber, "=", tempFirstNumber, "+", rightOperand)
-//                    tempFirstNumber = Double(messageLabel.text!)!
-//                    tempSign = "+"
-                    
-                }else{
-//                    print("2")
-//                    第一次按下"="來到這
-                    
-//                    將messageLabel目前顯示的String轉換成Double再給secondNumber
-//                    rightOperand = Double(messageLabel.text!)!
-//                    tempFinaNumber = leftOperand + rightOperand
-//                    calculateResultIfNeed()
-//                    messageLabel.text! = format(labelText:String(leftOperand))
-//                    print(tempFinaNumber, "=", leftOperand, "+", rightOperand)
-//                    messageLabel.text = "\(leftOperand)"
-//                    暫存符號tempSign,給在按下"="做判斷
 
-//                    把最後顯示出來的messageLabel轉換成數字暫存給tempFirstNumber,給在按下"="做計算
+                }else{
+
                     lastOperand = Double(messageLabel.text!)!
 
 
@@ -200,70 +180,53 @@ class ViewController: UIViewController {
                 messageLabel.text! = format(labelText:String(leftOperand))
                 
             case .subtract:
-                if tempSign == "-" {
-                    print("1")
-                    tempFinaNumber = tempFirstNumber - rightOperand
-                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-                    print(tempFinaNumber, "=", tempFirstNumber, "-", rightOperand)
-                    tempFirstNumber = Double(messageLabel.text!)!
-                    tempSign = "-"
-                }
-                else{
-                    print("2")
-                    rightOperand = Double(messageLabel.text!)!
-                    tempFinaNumber = tempFirstNumber - rightOperand
-                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-                    print(tempFinaNumber, "=", leftOperand, "-", rightOperand)
-                    tempSign = "-"
-                    tempFirstNumber = Double(messageLabel.text!)!
+              
+                if let previousRightOperand = previousRightOperand {
+                    rightOperand = previousRightOperand
+                    
+                }else{
+                    
+                    lastOperand = Double(messageLabel.text!)!
+                    
                     
                 }
+                calculateResultIfNeed()
+                messageLabel.text! = format(labelText:String(leftOperand))
+                
 
             case .multiply:
-                if tempSign == "*" {
-                    print("1")
-                    tempFinaNumber = tempFirstNumber * rightOperand
-                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-                    print(tempFinaNumber, "=", tempFirstNumber, "*", rightOperand)
-                    tempFirstNumber = Double(messageLabel.text!)!
-                    tempSign = "*"
-                }
-                else{
-                    print("2")
-                    rightOperand = Double(messageLabel.text!)!
-                    tempFinaNumber = tempFirstNumber * rightOperand
-                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-                    print(tempFinaNumber, "=", leftOperand, "*", rightOperand)
-                    tempSign = "*"
-                    tempFirstNumber = Double(messageLabel.text!)!
-
-                }
-                
-            case .divide:
-                if tempSign == "/" {
-                    print("1")
-                    tempFinaNumber = tempFirstNumber / rightOperand
-                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-                    print(tempFinaNumber, "=", tempFirstNumber, "/", rightOperand)
-                    tempFirstNumber = Double(messageLabel.text!)!
-                    tempSign = "/"
-                }
-                else{
-                    print("2")
-                    rightOperand = Double(messageLabel.text!)!
-                    tempFinaNumber = tempFirstNumber / rightOperand
-                    messageLabel.text! = format(labelText:String(tempFinaNumber))
-                    print(tempFinaNumber, "=", leftOperand, "/", rightOperand)
-                    tempSign = "/"
-                    tempFirstNumber = Double(messageLabel.text!)!
+            
+                if let previousRightOperand = previousRightOperand {
+                    rightOperand = previousRightOperand
+                    
+                }else{
+                    
+                    lastOperand = Double(messageLabel.text!)!
+                    
                     
                 }
+                calculateResultIfNeed()
+                messageLabel.text! = format(labelText:String(leftOperand))
+                
+            case .divide:
+            
+                if let previousRightOperand = previousRightOperand {
+                    rightOperand = previousRightOperand
+                    
+                }else{
+                    
+                    lastOperand = Double(messageLabel.text!)!
+                    
+                    
+                }
+                calculateResultIfNeed()
+                messageLabel.text! = format(labelText:String(leftOperand))
             }
         }
 //        messageLabel.text = String(format: "%g", tempFinaNumber)
 //        //將內存的值歸0，從新開始
 //        leftOperand = 0
-        isTypingNumber = false
+        isTypeDigit = false
     }
     
     func format(labelText: String) -> String {
