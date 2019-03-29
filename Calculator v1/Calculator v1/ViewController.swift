@@ -19,14 +19,12 @@ class ViewController: UIViewController {
         case divide     // /
     }
 
-    var leftOperand = Double() // expresess, leftoperand
+    var leftOperand = Double() // Express, leftoperand
     var rightOperand = Double() // rightOperand
     var lastOperator: operatorType?     // +, -, *, /
     var isTypingNumber : Bool = false   //是否再輸入數字的判斷
 //
-    var tempFinaNumber = Double()
-    var tempFirstNumber = Double() // ??
-    var tempSign = String()
+    var lastOperand = Double()
 
     var previousRightOperand: Double?
 
@@ -37,7 +35,7 @@ class ViewController: UIViewController {
     }
     
 //    數字鍵,小數點
-    @IBAction func numberButtonClick(_ sender: UIButton) {
+    @IBAction func digitButtonTuch(_ sender: UIButton) {
 //        若是螢幕正在輸入數字，後面輸入的數字會繼續加入螢幕
 //        避免第一個數字是0一直按0會變成"000000"
         if isTypingNumber == true && messageLabel.text == "0" && sender.currentTitle! == "0" {
@@ -83,7 +81,7 @@ class ViewController: UIViewController {
         print("percent messageLabel:", messageLabel.text!)
     }
 //     ←
-    @IBAction func backButtinClick(_ sender: Any) {
+    @IBAction func deleteLastDigitButtonTouch(_ sender: Any) {
         messageLabel.text = String((messageLabel.text?.dropLast())!)
 //        如果刪除到最後一個數字時再補0,避免messageLabel出現空白
         if messageLabel.text == "" {
@@ -91,7 +89,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @IBAction func clearButtonClick(_ sender: Any) {
+    @IBAction func ResetButtonTouch(_ sender: Any) {
         reset()
     }
     
@@ -99,16 +97,17 @@ class ViewController: UIViewController {
         messageLabel.text = "0"
         leftOperand = 0
         rightOperand = 0
+        lastOperator = nil
         isTypingNumber = false
+        previousRightOperand = 0
         
         //        暫存給重複按下"="計算
-        tempFinaNumber = 0
-        tempFirstNumber = 0
-        tempSign = ""
+        lastOperand = 0
+
     }
     
 //     +
-    @IBAction func plusButtonClick(_ sender: Any) {
+    @IBAction func addButtonTouch(_ sender: Any) {
         //將目前的messageLabel存入firstNumber
 //        leftOperand = Double(messageLabel.text!)!
         //在把firstNumber存入tempFirstNumber
@@ -127,42 +126,42 @@ class ViewController: UIViewController {
     }
     
 //     -
-    @IBAction func substracButtonClick(_ sender: Any) {
+    @IBAction func substracButtonTouch(_ sender: Any) {
 
         calculateResultIfNeed()
         
-        tempFirstNumber = leftOperand
-        print("tempFirstNumber:", tempFirstNumber)
+        lastOperand = leftOperand
+        print("lastOperand:", lastOperand)
         lastOperator = operatorType.subtract
         isTypingNumber = false
         messageLabel.text = String(format: "%g", leftOperand)
     }
 
 //     *
-    @IBAction func multiButtonClick(_ sender: Any) {
+    @IBAction func multiplyButtonTouch(_ sender: Any) {
 
         calculateResultIfNeed()
         
-        tempFirstNumber = leftOperand
-        print("tempFirstNumber:", tempFirstNumber)
+        lastOperand = leftOperand
+        print("lastOperand:", lastOperand)
         lastOperator = operatorType.multiply
         isTypingNumber = false
         messageLabel.text = String(format: "%g", leftOperand)
     }
 //     /
-    @IBAction func divisionButtonClick(_ sender: Any) {
+    @IBAction func divisionButtonTouch(_ sender: Any) {
         
         calculateResultIfNeed()
         
-        tempFirstNumber = leftOperand
-        print("tempFirstNumber:", tempFirstNumber)
+        lastOperand = leftOperand
+        print("lastOperand:", lastOperand)
         lastOperator = operatorType.divide
         isTypingNumber = false
         messageLabel.text = String(format: "%g", leftOperand)
     }
     
 //     =
-    @IBAction func equalToButtonClick(_ sender: Any) {
+    @IBAction func equalToButtonTouch(_ sender: Any) {
         if let finalOperator = lastOperator {
 //            使用紀錄的最後一個計算法，來計算最後結果
             switch finalOperator {
@@ -191,9 +190,9 @@ class ViewController: UIViewController {
 //                    print(tempFinaNumber, "=", leftOperand, "+", rightOperand)
 //                    messageLabel.text = "\(leftOperand)"
 //                    暫存符號tempSign,給在按下"="做判斷
-                    tempSign = "+"
+
 //                    把最後顯示出來的messageLabel轉換成數字暫存給tempFirstNumber,給在按下"="做計算
-                    tempFirstNumber = Double(messageLabel.text!)!
+                    lastOperand = Double(messageLabel.text!)!
 
 
                 }
