@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     var rightOperand = Double() // rightOperand
     var lastOperand = Double()
 
-    var isTypeDigit : Bool = false   //是否再輸入數字的判斷
+    var digitInput : Bool = false
 
     var previousRightOperand: Double?
     var previousLastOperand = Double()
@@ -50,12 +50,12 @@ class ViewController: UIViewController {
                 if messageLabel.text == "0" {
                     messageLabel.text = "0"
                 }else{
-                if isTypeDigit == false {
+                if digitInput == false {
                     messageLabel.text = ""
                     messageLabel.text = messageLabel.text! + sender.currentTitle!
                 }
                 messageLabel.text = messageLabel.text! + sender.currentTitle!
-                    isTypeDigit = true
+                    digitInput = true
                 }
             }else if sender.currentTitle == "." {
                 if messageLabel.text == "0" {
@@ -67,22 +67,21 @@ class ViewController: UIViewController {
                 }
             }else if sender.currentTitle != "0" {
                 
-                if messageLabel.text == "0" , isTypeDigit == false {
+                if messageLabel.text == "0" , digitInput == false {
                         print("1")
                         messageLabel.text = ""
-                    isTypeDigit = true
-                }else if messageLabel.text! != "0" , isTypeDigit == false , abs(leftOperand) > 0 {
+                    digitInput = true
+                }else if messageLabel.text! != "0" , digitInput == false , abs(leftOperand) > 0 {
                         messageLabel.text = ""
-                        isTypeDigit = true
+                        digitInput = true
                 }
                     messageLabel.text = messageLabel.text! + sender.currentTitle!
-                    isTypeDigit = true
+                    digitInput = true
                     
                 }
         }
 
         if let _ = lastOperator {
-            print("last:", isTypeDigit)
             messageLabelTextCheck()
             rightOperand = Double(messageLabel.text!)!
         }else {
@@ -97,7 +96,6 @@ class ViewController: UIViewController {
     
 //  Plus Or Minus
     @IBAction func plusOrMinus(_ sender: UIButton) {
-        //如果messageLabel 是0就不動作
         if messageLabel.text == "0" {
             print("plusOrMinus messageLabel:", messageLabel.text!)
         }else{
@@ -109,18 +107,15 @@ class ViewController: UIViewController {
     
 //  percent
     @IBAction func percent(_ sender: UIButton) {
-        //如果messageLabel 是0就不動作
         if messageLabel.text == "0" {
 
         }
-        //將messageLabel原本String轉換成Double / 100,再將值傳回messageLabel
         messageLabel.text = String(Double(messageLabel.text!)! / 100)
 
     }
 //  Delete Last Digit
     @IBAction func deleteLastDigitButtonTouch(_ sender: UIButton) {
         messageLabel.text = String((messageLabel.text?.dropLast())!)
-//        如果刪除到最後一個數字時再補0,避免messageLabel出現空白
         if messageLabel.text == "" {
            messageLabel.text = "0"
         }
@@ -137,7 +132,7 @@ class ViewController: UIViewController {
         lastOperand = 0
         
         lastOperator = nil
-        isTypeDigit = false
+        digitInput = false
         previousRightOperand = nil
         equalToButtonPress = false
         operatorTypeButtonPress = false
@@ -160,10 +155,8 @@ class ViewController: UIViewController {
             onlyPressDigitButtonAndOperator()
             
         }
-        //紀錄算法，最後由等號的條件判斷來計算值
         lastOperator = operatorType.add
-        //輸入數字輸入停止
-        isTypeDigit = false
+        digitInput = false
     }
     
 //     substrac
@@ -184,7 +177,7 @@ class ViewController: UIViewController {
         }
 
         lastOperator = operatorType.subtract
-        isTypeDigit = false
+        digitInput = false
         
     }
     
@@ -205,7 +198,7 @@ class ViewController: UIViewController {
             
         }
         lastOperator = operatorType.multiply
-        isTypeDigit = false
+        digitInput = false
     }
 //     division
     @IBAction func divisionButtonTouch(_ sender: UIButton) {
@@ -224,7 +217,7 @@ class ViewController: UIViewController {
             
         }
         lastOperator = operatorType.divide
-        isTypeDigit = false
+        digitInput = false
     }
     
 //  equal To
@@ -292,7 +285,7 @@ class ViewController: UIViewController {
             equalToButtonPress = true
 
         }
-        isTypeDigit = false
+        digitInput = false
     }
     
     func format(labelText: String) -> String {
