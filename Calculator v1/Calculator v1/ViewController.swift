@@ -53,45 +53,45 @@ class ViewController: UIViewController {
                 if isTypeDigit == false {
                     messageLabel.text = ""
                     messageLabel.text = messageLabel.text! + sender.currentTitle!
-
                 }
                 messageLabel.text = messageLabel.text! + sender.currentTitle!
+                    isTypeDigit = true
                 }
             }else if sender.currentTitle == "." {
                 if messageLabel.text == "0" {
                     messageLabel.text = "0."
-                    print("YS")
+
                 }else if !(messageLabel.text!.contains(".")) {
                     messageLabel.text! += "."
-                    print("X?")
-                }
-            }else if messageLabel.text == "0" , sender.currentTitle != "0" {
-                messageLabel.text = ""
-                messageLabel.text! += sender.currentTitle!
-            }else{
-                messageLabel.text = messageLabel.text! + sender.currentTitle!
 
-            }
+                }
+            }else if sender.currentTitle != "0" {
+                
+                if messageLabel.text == "0" , isTypeDigit == false {
+                        print("1")
+                        messageLabel.text = ""
+                    isTypeDigit = true
+                }else if messageLabel.text! != "0" , isTypeDigit == false , abs(leftOperand) > 0 {
+                        messageLabel.text = ""
+                        isTypeDigit = true
+                }
+                    messageLabel.text = messageLabel.text! + sender.currentTitle!
+                    isTypeDigit = true
+                    
+                }
         }
-        
-        //--------------------------
+
         if let _ = lastOperator {
-            
+            print("last:", isTypeDigit)
             messageLabelTextCheck()
             rightOperand = Double(messageLabel.text!)!
-            isTypeDigit = true
-        }
-        else {
+        }else {
 
             messageLabelTextCheck()
             leftOperand = Double(messageLabel.text!)!
-            isTypeDigit = true
         }
 
     }
-
-//    if !(resultBar.text!.contains(".")) {
-//    resultBar.text! += "."
     
     
     
@@ -111,11 +111,11 @@ class ViewController: UIViewController {
     @IBAction func percent(_ sender: UIButton) {
         //如果messageLabel 是0就不動作
         if messageLabel.text == "0" {
-            print("percent messageLabel:", messageLabel.text!)
+
         }
         //將messageLabel原本String轉換成Double / 100,再將值傳回messageLabel
         messageLabel.text = String(Double(messageLabel.text!)! / 100)
-        print("percent messageLabel:", messageLabel.text!)
+
     }
 //  Delete Last Digit
     @IBAction func deleteLastDigitButtonTouch(_ sender: UIButton) {
@@ -152,8 +152,7 @@ class ViewController: UIViewController {
         }else{
             operatorTypeButtonPress = true
         }
-        print(equalToButtonPress, operatorTypeButtonPress)
-        print("leftOperand", leftOperand)
+    
         if equalToButtonPress == false , operatorTypeButtonPress == true {
             onlyPressDigitButtonAndOperator()
         }
@@ -165,7 +164,6 @@ class ViewController: UIViewController {
         lastOperator = operatorType.add
         //輸入數字輸入停止
         isTypeDigit = false
-        //格式%g，可以去掉Double小數點後的零
     }
     
 //     substrac
@@ -176,8 +174,7 @@ class ViewController: UIViewController {
         }else{
             operatorTypeButtonPress = true
         }
-        print(equalToButtonPress, operatorTypeButtonPress)
-        print("leftOperand", leftOperand)
+        
         if equalToButtonPress == false , operatorTypeButtonPress == true {
             onlyPressDigitButtonAndOperator()
         }
@@ -199,8 +196,7 @@ class ViewController: UIViewController {
         }else{
             operatorTypeButtonPress = true
         }
-        print(equalToButtonPress, operatorTypeButtonPress)
-        print("leftOperand", leftOperand)
+        
         if equalToButtonPress == false , operatorTypeButtonPress == true {
             onlyPressDigitButtonAndOperator()
         }
@@ -219,8 +215,7 @@ class ViewController: UIViewController {
         }else{
             operatorTypeButtonPress = true
         }
-        print(equalToButtonPress, operatorTypeButtonPress)
-        print("leftOperand", leftOperand)
+
         if equalToButtonPress == false , operatorTypeButtonPress == true {
             onlyPressDigitButtonAndOperator()
         }
@@ -234,7 +229,6 @@ class ViewController: UIViewController {
     
 //  equal To
     @IBAction func equalToButtonTouch(_ sender: UIButton) {
-        print(equalToButtonPress , operatorTypeButtonPress)
         if equalToButtonPress == false , operatorTypeButtonPress == true {
             equalToButtonPress = false
             operatorTypeButtonPress = false
@@ -249,10 +243,9 @@ class ViewController: UIViewController {
                 if equalToButtonPress == true, operatorTypeButtonPress == false ,let previousRightOperand = previousRightOperand {
                     rightOperand = previousRightOperand
                     moreThanTwiceToucheQualToButton()
-                    messageLabel.text! = format(labelText:String(lastOperand))
+//                    messageLabel.text! = format(labelText:String(lastOperand))
                 }else if equalToButtonPress == true, operatorTypeButtonPress == true {
                     equalToButtonPressAddOperatorType()
-                    messageLabel.text! = format(labelText:String(lastOperand))
                 }else{
                     calculateResultIfNeed()
                     messageLabel.text! = format(labelText:String(lastOperand))
@@ -266,7 +259,6 @@ class ViewController: UIViewController {
                     messageLabel.text! = format(labelText:String(lastOperand))
                 }else if equalToButtonPress == true, operatorTypeButtonPress == true {
                     equalToButtonPressAddOperatorType()
-                    messageLabel.text! = format(labelText:String(lastOperand))
                 }else{
                     calculateResultIfNeed()
                     messageLabel.text! = format(labelText:String(lastOperand))
@@ -280,7 +272,6 @@ class ViewController: UIViewController {
                     messageLabel.text! = format(labelText:String(lastOperand))
                 }else if equalToButtonPress == true, operatorTypeButtonPress == true {
                     equalToButtonPressAddOperatorType()
-                    messageLabel.text! = format(labelText:String(lastOperand))
                 }else{
                     calculateResultIfNeed()
                     messageLabel.text! = format(labelText:String(lastOperand))
@@ -293,7 +284,6 @@ class ViewController: UIViewController {
                     messageLabel.text! = format(labelText:String(lastOperand))
                 }else if equalToButtonPress == true, operatorTypeButtonPress == true {
                     equalToButtonPressAddOperatorType()
-                    messageLabel.text! = format(labelText:String(lastOperand))
                 }else{
                     calculateResultIfNeed()
                     messageLabel.text! = format(labelText:String(lastOperand))
@@ -364,6 +354,8 @@ extension ViewController {
                 print(lastOperand, "=", leftOperand, "/", rightOperand)
             }
             previousRightOperand = rightOperand
+            messageLabel.text! = format(labelText:String(lastOperand))
+
         }
     }
     
@@ -394,6 +386,7 @@ extension ViewController {
             }
                 previousRightOperand = rightOperand
                 rightOperand = 0
+            messageLabel.text! = format(labelText:String(lastOperand))
 
         }
     }
